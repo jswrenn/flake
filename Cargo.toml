@@ -1,0 +1,9 @@
+[package]
+name = "flake"
+version = "0.1.0"
+authors = ["Jack Wrenn <custopootimus@gmail.com>"]
+
+[dependencies]
+glium = "*"
+nalgebra = "0.2"
+num = "0.1.27"
