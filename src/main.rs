@@ -74,39 +74,11 @@ fn main() {
 
     let (frame_dx, frame_dy) = display.get_framebuffer_dimensions();
     let (frame_dx, frame_dy) = (frame_dx as f32, frame_dy as f32);
-
+    
     let projection
       = Mat2::new(2.0/frame_dx, 0.0,
                   0.          , 2.0/frame_dy);
-
-    let uniforms = uniform!(
-      projection : projection * scale,
-      translation: translation,
-    );
-
-    let mut target = display.draw();
-    target.clear_color(1.0, 1.0, 1.0, 1.0);
-
-    for line in &commited_lines[..] {
-      target.draw(
-        line,
-        &indices,
-        &program,
-        &uniforms,
-        &params).unwrap();
-    }
-    
-    if let State::Drawing = state {
-        target.draw(
-          &glium::VertexBuffer::new(&display, &current_line).unwrap(),
-          &indices,
-          &program,
-          &uniforms,
-          &Default::default()).unwrap();
-    }
-
-    target.finish().unwrap();
-
+                  
     for event in display.poll_events() {
       match (event, state) {
       
@@ -128,7 +100,7 @@ fn main() {
 
         (MouseInput(Released,Left), State::Drawing) => {
             commited_lines.push(
-              glium::VertexBuffer::new(&display, &current_line).unwrap());
+              glium::VertexBuffer::immutable(&display, &current_line).unwrap());
             current_line.clear();
             state = State::None;
         },
@@ -166,5 +138,33 @@ fn main() {
         _ => ()
       }
     }
+
+    let uniforms = uniform!(
+      projection : projection * scale,
+      translation: translation,
+    );
+
+    let mut target = display.draw();
+    target.clear_color(1.0, 1.0, 1.0, 1.0);
+
+    for line in &commited_lines[..] {
+      target.draw(
+        line,
+        &indices,
+        &program,
+        &uniforms,
+        &params).unwrap();
+    }
+    
+    if let State::Drawing = state {
+        target.draw(
+          &glium::VertexBuffer::new(&display, &current_line).unwrap(),
+          &indices,
+          &program,
+          &uniforms,
+          &Default::default()).unwrap();
+    }
+
+    target.finish().unwrap();
   }
 }
