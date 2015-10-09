@@ -4,6 +4,6 @@ version = "0.1.0"
 authors = ["Jack Wrenn <custopootimus@gmail.com>"]
 
 [dependencies]
-glium = "*"
+glium = {version = "*", default-features = false, features = ["glutin", "nalgebra"] }
 nalgebra = "0.2"
 num = "0.1.27"
