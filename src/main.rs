@@ -88,6 +88,7 @@ fn main() {
           } else { 
             scale *= 0.9; 
           }
+          translation = -mouse_last + mouse_last/scale;
         },
 
         (MouseInput(Pressed,Left), State::None) => {
