@@ -84,9 +84,9 @@ fn main() {
       
         (MouseWheel(PixelDelta(_, dy)), _)  => {
           if dy > 0.0 {
-            scale *= 1.1;
+            scale /= 0.99;
           } else { 
-            scale *= 0.9; 
+            scale *= 0.99; 
           }
           translation = -mouse_last + mouse_last/scale;
         },
